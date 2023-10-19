@@ -8,10 +8,12 @@ body {
 }
 
 :root {
-  --background1: rgb(255, 255, 255);
-  --background2: rgb(255, 255, 255);
+  --background1: rgb(132, 234, 219);
+  --background2: rgb(196, 242, 222);
   --text1: rgb(0, 0, 0);
   --text2: rgb(0, 0, 0);
+  --text-footer: rgb(0, 0, 0);
+  font-size: 16px;
 }
 
 :root.light {
@@ -19,6 +21,8 @@ body {
   --background2: rgb(255, 255, 255);
   --text1: rgb(0, 0, 0);
   --text2: rgb(0, 0, 0);
+  --text-footer: rgb(0, 0, 0);
+  font-size: 16px;
 }
 
 :root.dark {
@@ -26,17 +30,38 @@ body {
   --background2: rgb(0, 0, 0);
   --text1: rgb(255, 255, 255);
   --text2: rgb(255, 255, 255);
+  --text-footer: rgb(255, 255, 255);
+  font-size: 16px;
 }
 
+.content1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 50px);
+}
 
+.container {
+  background-color: var(--background2);
+}
 
+.column {
+  height: 25px;
+  width: 25px;
+  border: 1px solid rgb(128, 204, 241);
+}
+
+.row {
+  display: flex;
+}
 
 footer {
   height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--text2);
+  font-size: 1rem;
+  color: var(--text-footer);
   position: fixed;
   bottom: 0;
   left: 0;
