@@ -11,10 +11,26 @@ function colorSquare() {
   selectedSquare.style.backgroundColor = ('black');
   selectedSquare.setAttribute('class', 'active square');
 }
-
 colorSquare();
 
+function colorTetrominoO() {
+  const selectedSquare1 = document.querySelector('#r1 #s5');
+  const selectedSquare2 = document.querySelector('#r1 #s6');
+  const selectedSquare3 = document.querySelector('#r2 #s5');
+  const selectedSquare4 = document.querySelector('#r2 #s6');
 
+  selectedSquare1.style.backgroundColor = ('black');
+  selectedSquare2.style.backgroundColor = ('black');
+  selectedSquare3.style.backgroundColor = ('black');
+  selectedSquare4.style.backgroundColor = ('black');
+
+  selectedSquare1.setAttribute('class', 'active square');
+  selectedSquare2.setAttribute('class', 'active square');
+  selectedSquare3.setAttribute('class', 'active square');
+  selectedSquare4.setAttribute('class', 'active square');
+}
+/* colorTetrominoO();
+ */
 function moveSquare() {
   document.addEventListener('keydown', function(event) {
 
@@ -57,6 +73,9 @@ function goUp() {
 }
 
 function goDown() {
+
+/*   for (let i = 0; i < 4; i++) {
+ */
   const selectedSquare = document.querySelector('.active');
   console.log("executed goDown");
 
@@ -77,16 +96,30 @@ function goDown() {
     if (test === 'stacked square') {       //tests if the next square is already stacked and freezes
       selectedSquare.setAttribute('class', 'stacked square');
       colorSquare();
-      selectedParent = 'r1';
+      selectedParent = 'r1';  //need to add function for random block creation
       selectedChild = 's5';
 
     } else {
+
+/*       const parentTest2 = selectedSquare.parentNode;
+      const parent2Test2 = parentTest2.nextElementSibling;
+      nextParent2 = parent2Test2.getAttribute('id');
+      const nextSquare2 = document.querySelector(`#${nextParent} #${selectedChild}`);
+      const test = nextSquare.getAttribute('class');
+      console.log(test);                     //gets the class of the next square
+
+      if (test === 'active square') {
+        return
+      } else {
+ */
       selectedSquare.style.backgroundColor = ('rgb(196, 242, 222)');
       selectedSquare.setAttribute('class', 'square');
 
       const parent = selectedSquare.parentNode;
       const parent2 = parent.nextElementSibling;
       selectedParent = parent2.getAttribute('id');
+
+      selectedChild = selectedSquare.getAttribute('id');   //Needed to update current square location
 
       const newSquare = document.querySelector(`#${selectedParent} #${selectedChild}`);
       selectedChild = newSquare.getAttribute('id');
@@ -95,15 +128,19 @@ function goDown() {
 
       console.log(selectedParent);
       console.log(selectedChild);
-    }
+/*       } //
+ */    }
   } else {}
-}
+/* } //
+ */}
 
 function goRight() {
   const selectedSquare = document.querySelector('.active');
 
   if (selectedChild === 's10') {   //Keeps active square from leaving right grid border
     return;
+  } else if (selectedSquare.nextElementSibling.getAttribute('class') === 'stacked square') {
+    return;   //Keeps active square from going through a stacked square
   } else {
     selectedSquare.style.backgroundColor = ('rgb(196, 242, 222)');
     selectedSquare.setAttribute('class', 'square');
@@ -123,6 +160,8 @@ function goLeft() {
 
   if (selectedChild === 's1') {   //Keeps active square from leaving left grid border
     return;
+  } else if (selectedSquare.previousElementSibling.getAttribute('class') === 'stacked square') {
+    return;   //Keeps active square from going through a stacked square
   } else {
     selectedSquare.style.backgroundColor = ('rgb(196, 242, 222)');
     selectedSquare.setAttribute('class', 'square');
@@ -159,11 +198,6 @@ function stopDrop() {
 }
 
 
-/* function stay() {
-  const selectedSquare = document.getElementById('active');
+//Bugs
 
-  if (selectedParent === 'r20') {   //If at the bottom
-    stopDrop();
-  } else {}
-}
-stay(); */
+//Hitting start multiple times
