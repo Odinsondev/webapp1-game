@@ -21,6 +21,9 @@ let nextParent2 = '';
 let nextParent3 = '';
 let nextParent4 = '';
 
+//Variable for turning tetrominos
+let tetromino = '';
+let tetrominoPosition = '';
 
 
 function colorSquare() {
@@ -34,6 +37,21 @@ function colorSquare() {
 /* colorSquare();
  */
 
+
+function getRandomInteger(min, max) {
+  return Math.floor((Math.random() * (max - min) + min) * 10);
+}
+
+function selectBlock() {
+  const block = getRandomInteger(0.1, 0.3)
+
+  if (block == 1) {
+    colorTetrominoO();
+  } else if (block == 2) {
+    colorTetrominoT();
+  } else {}
+}
+selectBlock();
 
 
 function colorTetrominoO() {
@@ -60,12 +78,44 @@ function colorTetrominoO() {
   selectedSquare4.setAttribute('class', 'active4 square');
   selectedParent4 = 'r2';
   selectedChild4 = 's6';
+
+  tetromino = 'o';
 }
-colorTetrominoO();
+/* colorTetrominoO();
+ */
 
+function colorTetrominoT() {
+  const selectedSquare1 = document.querySelector('#r1 #s5');
+  selectedSquare1.style.backgroundColor = ('black');
+  selectedSquare1.setAttribute('class', 'active1 square');
+  selectedParent1 = 'r1';
+  selectedChild1 = 's5';
 
+  const selectedSquare2 = document.querySelector('#r1 #s6');
+  selectedSquare2.style.backgroundColor = ('black');
+  selectedSquare2.setAttribute('class', 'active2 square');
+  selectedParent2 = 'r1';
+  selectedChild2 = 's6';
 
-function moveSquare() {
+  const selectedSquare3 = document.querySelector('#r1 #s7');
+  selectedSquare3.style.backgroundColor = ('black');
+  selectedSquare3.setAttribute('class', 'active3 square');
+  selectedParent3 = 'r1';
+  selectedChild3 = 's7';
+
+  const selectedSquare4 = document.querySelector('#r2 #s6');
+  selectedSquare4.style.backgroundColor = ('black');
+  selectedSquare4.setAttribute('class', 'active4 square');
+  selectedParent4 = 'r2';
+  selectedChild4 = 's6';
+
+  tetromino = 't';
+  tetrominoPosition = '1';
+}
+/* colorTetrominoT();
+ */
+
+function moveTetromino() {
   document.addEventListener('keydown', function(event) {
 
     console.log(event.code);
@@ -78,10 +128,208 @@ function moveSquare() {
       goRight();
     } else if (event.code == 'ArrowLeft') {
       goLeft();
+    } else if (event.code == 'KeyX') {
+      rotateRight();
+    } else if (event.code == 'KeyZ') {
+      rotateLeft();
     } else {}
   });
 }
-moveSquare();
+moveTetromino();
+
+function rotateRight() {
+  if (tetromino === 'o') {
+    return;
+  } else if (tetromino === 't') {
+    tetrominoRightT();
+  } else {}
+}
+
+function rotateLeft() {
+  if (tetromino === 'o') {
+    return;
+  } else if (tetromino === 't') {
+    tetrominoLeftT();
+  } else {}
+}
+
+function tetrominoRightT() {
+  if (tetrominoPosition === '1') {
+    const selectedSquare2 = document.querySelector('.active2');
+    const selectedSquare3 = document.querySelector('.active3');
+
+    selectedSquare3.style.backgroundColor = ('rgb(196, 242, 222)');   //Delete 3
+    selectedSquare3.setAttribute('class', 'square');
+
+    selectedSquare2.setAttribute('class', 'active3 square');   //set 2 to 3
+
+    const parent2 = selectedSquare2.parentNode.previousElementSibling;   //Select middle up
+    selectedParent2 = parent2.getAttribute('id');
+
+    selectedChild2 = selectedSquare2.getAttribute('id');   //Needed to update current square location
+
+    const newSquare2 = document.querySelector(`#${selectedParent2} #${selectedChild2}`);
+    selectedChild2 = newSquare2.getAttribute('id');
+    newSquare2.style.backgroundColor = ('black');
+    newSquare2.setAttribute('class', 'active2 square');   //set new 2
+
+    tetrominoPosition = '2';
+  } else if (tetrominoPosition === '2') {
+    const selectedSquare3 = document.querySelector('.active3');
+    const selectedSquare4 = document.querySelector('.active4');
+
+    selectedSquare4.style.backgroundColor = ('rgb(196, 242, 222)');   //Delete 4
+    selectedSquare4.setAttribute('class', 'square');
+
+    const newSquare4 = selectedSquare3.nextElementSibling;
+    selectedChild4 = newSquare4.getAttribute('id');
+    newSquare4.style.backgroundColor = ('black');
+    newSquare4.setAttribute('class', 'active4 square');   //set new 4
+
+    tetrominoPosition = '3';
+  } else if (tetrominoPosition === '3') {
+    const selectedSquare1 = document.querySelector('.active1');
+    const selectedSquare2 = document.querySelector('.active2');
+    const selectedSquare3 = document.querySelector('.active3');
+
+    selectedSquare1.style.backgroundColor = ('rgb(196, 242, 222)');   //Delete 1
+    selectedSquare1.setAttribute('class', 'square');
+
+    selectedSquare2.setAttribute('class', 'active1 square');   //set 2 to 1
+    selectedSquare3.setAttribute('class', 'active2 square');   //set 3 to 2
+
+    const parent3 = selectedSquare3.parentNode.nextElementSibling;   //Select middle down
+    selectedParent3 = parent3.getAttribute('id');
+
+    selectedChild3 = selectedSquare3.getAttribute('id');   //Needed to update current square location
+
+    const newSquare3 = document.querySelector(`#${selectedParent3} #${selectedChild3}`);
+    selectedChild3 = newSquare3.getAttribute('id');
+    newSquare3.style.backgroundColor = ('black');
+    newSquare3.setAttribute('class', 'active3 square');   //set new 3
+
+    tetrominoPosition = '4';
+  } else if (tetrominoPosition === '4') {
+    const selectedSquare1 = document.querySelector('.active1');
+    const selectedSquare2 = document.querySelector('.active2');
+    const selectedSquare3 = document.querySelector('.active3');
+    const selectedSquare4 = document.querySelector('.active4');
+
+    selectedSquare1.style.backgroundColor = ('rgb(196, 242, 222)');   //Delete 1
+    selectedSquare1.setAttribute('class', 'square');
+
+    selectedSquare3.setAttribute('class', 'active4 square');   //set 3 to 4
+    selectedSquare4.setAttribute('class', 'active3 square');   //set 4 to 3
+
+    const parent1 = selectedSquare2.parentNode;   //Select middle left
+    selectedParent1 = parent1.getAttribute('id');
+
+    selectedChild1 = selectedSquare2.previousElementSibling.getAttribute('id');   //Needed to update current square location
+
+    const newSquare1 = document.querySelector(`#${selectedParent1} #${selectedChild1}`);
+    selectedChild1 = newSquare1.getAttribute('id');
+    newSquare1.style.backgroundColor = ('black');
+    newSquare1.setAttribute('class', 'active1 square');   //set new 1
+
+    tetrominoPosition = '1';
+  } else {}
+}
+
+
+
+function tetrominoLeftT() {
+  if (tetrominoPosition === '1') {
+    const selectedSquare1 = document.querySelector('.active1');
+    const selectedSquare2 = document.querySelector('.active2');
+    const selectedSquare3 = document.querySelector('.active3');
+    const selectedSquare4 = document.querySelector('.active4');
+
+
+    selectedSquare1.style.backgroundColor = ('rgb(196, 242, 222)');   //Delete 1
+    selectedSquare1.setAttribute('class', 'square');
+
+    selectedSquare3.setAttribute('class', 'active4 square');   //set 3 to 4
+    selectedSquare4.setAttribute('class', 'active3 square');   //set 4 to 3
+
+    const parent1 = selectedSquare2.parentNode.previousElementSibling;   //Select middle up
+    selectedParent1 = parent1.getAttribute('id');
+
+    selectedChild1 = selectedSquare2.getAttribute('id');   //Needed to update current square location
+
+    const newSquare1 = document.querySelector(`#${selectedParent1} #${selectedChild1}`);
+    selectedChild1 = newSquare1.getAttribute('id');
+    newSquare1.style.backgroundColor = ('black');
+    newSquare1.setAttribute('class', 'active1 square');   //set new 1
+
+    tetrominoPosition = '4';
+  } else if (tetrominoPosition === '4') {
+    const selectedSquare1 = document.querySelector('.active1');
+    const selectedSquare2 = document.querySelector('.active2');
+    const selectedSquare3 = document.querySelector('.active3');
+
+    selectedSquare3.style.backgroundColor = ('rgb(196, 242, 222)');   //Delete 3
+    selectedSquare3.setAttribute('class', 'square');
+
+    selectedSquare1.setAttribute('class', 'active2 square');   //set 1 to 2
+    selectedSquare2.setAttribute('class', 'active3 square');   //set 2 to 3
+
+    const parent1 = selectedSquare2.parentNode;   //Select middle left
+    selectedParent1 = parent1.getAttribute('id');
+
+    selectedChild1 = selectedSquare2.previousElementSibling.getAttribute('id');   //Needed to update current square location
+
+    const newSquare1 = document.querySelector(`#${selectedParent1} #${selectedChild1}`);
+    selectedChild1 = newSquare1.getAttribute('id');
+    newSquare1.style.backgroundColor = ('black');
+    newSquare1.setAttribute('class', 'active1 square');   //set new 1
+
+    tetrominoPosition = '3';
+  } else if (tetrominoPosition === '3') {
+    const selectedSquare3 = document.querySelector('.active3');
+    const selectedSquare4 = document.querySelector('.active4');
+
+    selectedSquare4.style.backgroundColor = ('rgb(196, 242, 222)');   //Delete 4
+    selectedSquare4.setAttribute('class', 'square');
+
+    const parent4 = selectedSquare3.parentNode.nextElementSibling;   //Select middle down
+    selectedParent4 = parent4.getAttribute('id');
+
+    selectedChild4 = selectedSquare3.getAttribute('id');   //Needed to update current square location
+
+    const newSquare4 = document.querySelector(`#${selectedParent4} #${selectedChild4}`);
+    selectedChild4 = newSquare4.getAttribute('id');
+    newSquare4.style.backgroundColor = ('black');
+    newSquare4.setAttribute('class', 'active4 square');   //set new 4
+
+    tetrominoPosition = '2';
+  } else if (tetrominoPosition === '2') {
+    const selectedSquare2 = document.querySelector('.active2');
+    const selectedSquare3 = document.querySelector('.active3');
+
+    selectedSquare2.style.backgroundColor = ('rgb(196, 242, 222)');   //Delete 2
+    selectedSquare2.setAttribute('class', 'square');
+
+    selectedSquare3.setAttribute('class', 'active2 square');   //set 3 to 2
+
+    const parent3 = selectedSquare3.parentNode;   //Select middle down
+    selectedParent3 = parent3.getAttribute('id');   //good to update parent to avoid errors
+
+    selectedChild3 = selectedSquare3.nextElementSibling.getAttribute('id');   //Needed to update current square location
+
+    const newSquare3 = document.querySelector(`#${selectedParent3} #${selectedChild3}`);
+    selectedChild3 = newSquare3.getAttribute('id');
+    newSquare3.style.backgroundColor = ('black');
+    newSquare3.setAttribute('class', 'active3 square');   //set new 3
+
+    tetrominoPosition = '1';
+  } else {}
+}
+
+
+
+
+
+
 
 
 
@@ -125,7 +373,7 @@ function goDown() {
     selectedSquare3.setAttribute('class', 'stacked square');
     selectedSquare4.setAttribute('class', 'stacked square');
     
-    colorTetrominoO();      //Keeps active square from leaving grid and freezes it
+    selectBlock();      //Keeps active square from leaving grid and freezes it
 
   } else if (selectedParent1 !== 'r20' || selectedParent2 !== 'r20' ||
   selectedParent3 !== 'r20' || selectedParent4 !== 'r20') {   //If runs on r20 - ERROR
@@ -156,23 +404,9 @@ function goDown() {
       selectedSquare3.setAttribute('class', 'stacked square');
       selectedSquare4.setAttribute('class', 'stacked square');
 
-      colorTetrominoO();   //need to add function for random block creation
+      selectBlock();   //need to add function for random block creation
 
     } else {
-      selectedSquare3.style.backgroundColor = ('rgb(196, 242, 222)');
-      selectedSquare3.setAttribute('class', 'square');
-
-      const parent3 = selectedSquare3.parentNode.nextElementSibling;
-      selectedParent3 = parent3.getAttribute('id');
-
-      selectedChild3 = selectedSquare3.getAttribute('id');   //Needed to update current square location
-
-      const newSquare3 = document.querySelector(`#${selectedParent3} #${selectedChild3}`);
-      selectedChild3 = newSquare3.getAttribute('id');
-      newSquare3.style.backgroundColor = ('black');
-      newSquare3.setAttribute('class', 'active3 square');
-
-
       selectedSquare4.style.backgroundColor = ('rgb(196, 242, 222)');
       selectedSquare4.setAttribute('class', 'square');
 
@@ -187,18 +421,18 @@ function goDown() {
       newSquare4.setAttribute('class', 'active4 square');
 
 
-      selectedSquare1.style.backgroundColor = ('rgb(196, 242, 222)');
-      selectedSquare1.setAttribute('class', 'square');
+      selectedSquare3.style.backgroundColor = ('rgb(196, 242, 222)');
+      selectedSquare3.setAttribute('class', 'square');
 
-      const parent1 = selectedSquare1.parentNode.nextElementSibling;
-      selectedParent1 = parent1.getAttribute('id');
+      const parent3 = selectedSquare3.parentNode.nextElementSibling;
+      selectedParent3 = parent3.getAttribute('id');
 
-      selectedChild1 = selectedSquare1.getAttribute('id');   //Needed to update current square location
+      selectedChild3 = selectedSquare3.getAttribute('id');   //Needed to update current square location
 
-      const newSquare1 = document.querySelector(`#${selectedParent1} #${selectedChild1}`);
-      selectedChild1 = newSquare1.getAttribute('id');
-      newSquare1.style.backgroundColor = ('black');
-      newSquare1.setAttribute('class', 'active1 square');
+      const newSquare3 = document.querySelector(`#${selectedParent3} #${selectedChild3}`);
+      selectedChild3 = newSquare3.getAttribute('id');
+      newSquare3.style.backgroundColor = ('black');
+      newSquare3.setAttribute('class', 'active3 square');
 
 
       selectedSquare2.style.backgroundColor = ('rgb(196, 242, 222)');
@@ -213,6 +447,20 @@ function goDown() {
       selectedChild2 = newSquare2.getAttribute('id');
       newSquare2.style.backgroundColor = ('black');
       newSquare2.setAttribute('class', 'active2 square');
+
+
+      selectedSquare1.style.backgroundColor = ('rgb(196, 242, 222)');
+      selectedSquare1.setAttribute('class', 'square');
+
+      const parent1 = selectedSquare1.parentNode.nextElementSibling;
+      selectedParent1 = parent1.getAttribute('id');
+
+      selectedChild1 = selectedSquare1.getAttribute('id');   //Needed to update current square location
+
+      const newSquare1 = document.querySelector(`#${selectedParent1} #${selectedChild1}`);
+      selectedChild1 = newSquare1.getAttribute('id');
+      newSquare1.style.backgroundColor = ('black');
+      newSquare1.setAttribute('class', 'active1 square');
     }
   } else {}
 }
@@ -349,3 +597,4 @@ function stopDrop() {
 //Bugs
 
 //Hitting start multiple times
+//rotate t to right if at top
